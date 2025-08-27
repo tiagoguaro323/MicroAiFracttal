@@ -10,13 +10,7 @@
     "build": "vite build",
     "npm:update": "npm update --force --save",
     "npm:install": "npm install --force --save --legacy-peer-deps",
-    "reinstall": "npx rimraf node_modules && npx rimraf package-lock.json && npm cache clean --force && npm install --force --save",
-    "postinstall": "husky install"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "reinstall": "npx rimraf node_modules && npx rimraf package-lock.json && npm cache clean --force && npm install --force --save"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -104,7 +98,6 @@
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",
     "sass": "^1.69.5",
