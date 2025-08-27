@@ -1,0 +1,110 @@
+name: Build Android
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+      bucket:
+        required: true
+        type: string
+      env:
+        required: false
+        type: string
+    secrets:
+      DEPLOY_KEY_FRACTTAL_CORE:
+        required: true
+      DEPLOY_KEY_PRINT_PACKAGE:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      ANDROID_KEY_ALIAS:
+        required: true
+      ANDROID_PASSWORD:
+        required: true
+jobs:
+  build-deploy-android:
+    runs-on: ${{ inputs.os }}
+    environment: ${{ inputs.env }}
+    env:
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_PASSWORD: ${{ secrets.ANDROID_PASSWORD }}
+      GITHUB_BUILD_NUMBER: ${{ github.run_number }}
+      GITHUB_TAG: ${{ github.ref_name }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ./.github/actions/nodejs-version
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin' # See 'Supported distributions' for available options
+        java-version: '17'
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1.180.1
+      with:
+        ruby-version: 3.3
+        bundler-cache: true
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4.0.2
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - id: install-private-dependencies
+      uses: ./.github/actions/install-private-dependencies
+      with:
+        deploy-key-fracttal-core: ${{ secrets.DEPLOY_KEY_FRACTTAL_CORE }}
+        deploy-key-print-package: ${{ secrets.DEPLOY_KEY_PRINT_PACKAGE }}
+    - uses: ./.github/actions/restore-cache
+      id: cache-modules-restore
+      with:
+        key: dependency-cache-${{ runner.arch }}-${{ hashfiles('package.json') }}
+        path: ./node_modules
+    - if: steps.cache-modules-restore.outputs.cache-hit != 'true'
+      uses: ./.github/actions/install-dependencies
+    - if: steps.cache-modules-restore.outputs.cache-hit != 'true'
+      uses: ./.github/actions/save-cache
+      id: cache-modules-save
+      with:
+        key: dependency-cache-${{ runner.arch }}-${{ hashfiles('package.json') }}
+        paths: |
+          ./node_modules
+    - uses: ./.github/actions/create-info
+    - uses: ./.github/actions/build-native-app
+    - name: Jetifier Exec
+      shell: bash
+      run: npx jetifier
+    - name: Update android
+      shell: bash
+      run: npx cap sync android
+    - name: "Build Version"
+      run: |-
+        ESCAPED_REPLACE="$(echo $GITHUB_TAG | tr -d '.' )$(($GITHUB_BUILD_NUMBER % 100))"
+        sed -i -e "s/\/\/ versionCode ___TAG___/versionCode $ESCAPED_REPLACE/" android/app/build.gradle
+        sed -i -e "s/\/\/ versionName \"___TAG___\"/versionName \"$GITHUB_TAG\"/" android/app/build.gradle
+        echo "VersionCode: $ESCAPED_REPLACE"
+        echo "GITHUB_FOLDER_S3=$(echo -n ${GITHUB_TAG:-default} | sed -e 's,\.,-,g')" >> GITHUB_ENV
+    - name: Install fastlane
+      shell: bash
+      run: cd android/ && bundle install && bundle update fastlane
+    - name: Assemble release build
+      shell: bash
+      run: cd android/ && bundle exec fastlane test
+    - name: Create Checksum
+      shell: bash
+      run: |
+        ls -la android/app/build/outputs/apk/release/ &&
+        shasum android/app/build/outputs/apk/release/app-release.apk -a 256 &&
+        sed -i -e "s/___CHECKSUM___/$(shasum android/app/build/outputs/apk/release/app-release.apk -a 256 | awk '{print $1}')/" ${GITHUB_WORKSPACE}/src/deploy-info.json &&
+        echo "$(cat ${GITHUB_WORKSPACE}/src/deploy-info.json)" &&
+        aws s3 cp ${GITHUB_WORKSPACE}/src/deploy-info.json s3://${{ inputs.bucket }}/${GITHUB_FOLDER_S3}/deploy-info.json \
+            --acl public-read \
+            --cache-control "max-age=86400"
+    - name: Upload apk to S3
+      uses: ./.github/actions/transfer-s3
+      with:
+        destination: s3://${{ inputs.bucket }}/android/apk/
+        source: ./android/app/build/outputs/apk/
+    
+      
+              

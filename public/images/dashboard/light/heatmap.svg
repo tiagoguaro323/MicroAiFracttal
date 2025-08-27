@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180" viewBox="0 0 180 180">
+  <defs>
+    <clipPath id="clip-Widget-heatmap">
+      <rect width="180" height="180"/>
+    </clipPath>
+  </defs>
+  <g id="Widget-heatmap" clip-path="url(#clip-Widget-heatmap)">
+    <g id="Grupo_34" data-name="Grupo 34" transform="translate(1)">
+      <path id="Rectángulo_19" data-name="Rectángulo 19" d="M4,0H46a0,0,0,0,1,0,0V52a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V4A4,4,0,0,1,4,0Z" transform="translate(21 38)" fill="#b9f6ca"/>
+      <path id="Rectángulo_24" data-name="Rectángulo 24" d="M0,0H46a0,0,0,0,1,0,0V53a0,0,0,0,1,0,0H4a4,4,0,0,1-4-4V0A0,0,0,0,1,0,0Z" transform="translate(21 90)" fill="#4687f1"/>
+      <rect id="Rectángulo_20" data-name="Rectángulo 20" width="45" height="52" transform="translate(67 38)" fill="#69f0ae"/>
+      <rect id="Rectángulo_22" data-name="Rectángulo 22" width="45" height="53" transform="translate(67 90)" fill="#6b9ff3"/>
+      <path id="Rectángulo_21" data-name="Rectángulo 21" d="M0,0H42a4,4,0,0,1,4,4V52a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(112 38)" fill="#51de8c"/>
+      <path id="Rectángulo_23" data-name="Rectángulo 23" d="M0,0H46a0,0,0,0,1,0,0V49a4,4,0,0,1-4,4H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(112 90)" fill="#a0d0ff"/>
+    </g>
+  </g>
+</svg>

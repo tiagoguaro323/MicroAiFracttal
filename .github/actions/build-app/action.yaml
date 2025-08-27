@@ -1,0 +1,9 @@
+name: 'Build React App Web 🏗️💻 '
+description: 'Builds the React App Web for deployment'
+author: 'Edwin Montoya <edwin.montoya@fracttal.com>'
+runs:
+  using: "composite"
+  steps:
+  - name: Building React App Web 🏗️💻
+    shell: bash
+    run: npm run web:build

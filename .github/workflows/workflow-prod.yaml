@@ -1,0 +1,151 @@
+name: Prod workflow
+
+permissions:
+  issues: write
+  contents: read
+
+on:
+  push:
+    tags:
+      '5.[0-9].[0-9][0-9]?' 
+jobs:
+  build:
+    uses: ./.github/workflows/job-build.yaml
+    with:
+      os: ubuntu-latest
+      env: development
+    secrets:
+      DEPLOY_KEY_FRACTTAL_CORE: ${{ secrets.DEPLOY_KEY_FRACTTAL_CORE }}
+      DEPLOY_KEY_PRINT_PACKAGE: ${{ secrets.DEPLOY_KEY_PRINT_PACKAGE }}
+  deploy-develop:
+    uses: ./.github/workflows/job-deploy.yaml
+    needs: build
+    with:
+      os: ubuntu-latest
+      env: development
+      bucket: ${{ vars.AWS_BUCKET_DEVELOP }}
+    secrets:
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # must 
+  deploy-qa:
+    uses: ./.github/workflows/job-deploy.yaml
+    needs: build
+    with:
+      os: ubuntu-latest
+      env: development
+      bucket: ${{ vars.AWS_BUCKET_QA }}
+    secrets:
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # must 
+  deploy-stage:
+    uses: ./.github/workflows/job-deploy.yaml
+    needs: deploy-develop
+    with:
+      os: ubuntu-latest
+      env: development
+      bucket: ${{ vars.AWS_BUCKET_STAGE }}
+    secrets:
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # must 
+  approve-prod:
+    runs-on:  ubuntu-latest
+    needs: deploy-stage
+    steps:
+    - uses: trstringer/manual-approval@v1
+      with:
+        secret: ${{ github.TOKEN }}
+        approvers: 'mlondonog,emonto15,juan-segura-fracttal'
+        minimum-approvals: 1
+        issue-title: "Despliegue producción v${{github.ref_name}}"
+        issue-body: "Por favor indique con 'Si' o 'Aprobado' si esta deacuerdo en desplegar a producción versión: ${{github.ref_name}}"
+        exclude-workflow-initiator-as-approver: false
+        additional-approved-words: 'Si,si,aprobado,Aprobado,aprobar,Aprobar,Yes,Approved,Approve'
+        additional-denied-words: 'rechazado,Rechazado,Rechazar,no,denied,deny'
+  deploy-prod:
+    uses: ./.github/workflows/job-deploy.yaml
+    needs: approve-prod
+    with:
+      os: ubuntu-latest
+      env: production
+      bucket: ${{ vars.AWS_BUCKET_PROD }}
+    secrets:
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # must be explicitly passed
+  approve-android-s3:
+    runs-on:  ubuntu-latest
+    needs: deploy-stage
+    steps:
+    - uses: trstringer/manual-approval@v1
+      with:
+        secret: ${{ github.TOKEN }}
+        approvers: 'mlondonog,emonto15,juan-segura-fracttal'
+        minimum-approvals: 1
+        issue-title: "Subir android apk v${{github.ref_name}} a S3"
+        issue-body: "Por favor indique con 'Si' o 'Aprobado' si esta deacuerdo en desplegar versión: ${{github.ref_name}}"
+        exclude-workflow-initiator-as-approver: false
+        additional-approved-words: 'Si,si,aprobado,Aprobado,aprobar,Aprobar,Yes,Approved,Approve'
+        additional-denied-words: 'rechazado,Rechazado,Rechazar,no,denied,deny'
+  deploy-android-s3:
+    uses: ./.github/workflows/job-android-build.yaml
+    needs: approve-android-s3
+    with:
+      os: ubuntu-latest
+      env: production
+      bucket: ${{ vars.AWS_BUCKET_PROD }}
+    secrets:
+      DEPLOY_KEY_FRACTTAL_CORE: ${{ secrets.DEPLOY_KEY_FRACTTAL_CORE }}
+      DEPLOY_KEY_PRINT_PACKAGE: ${{ secrets.DEPLOY_KEY_PRINT_PACKAGE }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # must be explicitly passed
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_PASSWORD: ${{ secrets.ANDROID_PASSWORD }}
+  approve-android-playstore:
+    runs-on:  ubuntu-latest
+    needs: deploy-android-s3
+    steps:
+    - uses: trstringer/manual-approval@v1
+      with:
+        secret: ${{ github.TOKEN }}
+        approvers: 'mlondonog,emonto15,juan-segura-fracttal'
+        minimum-approvals: 1
+        issue-title: "Despliegue android apk v${{github.ref_name}} a PlayStore"
+        issue-body: "Por favor indique con 'Si' o 'Aprobado' si esta deacuerdo en desplegar versión: ${{github.ref_name}}"
+        exclude-workflow-initiator-as-approver: false
+        additional-approved-words: 'Si,si,aprobado,Aprobado,aprobar,Aprobar,Yes,Approved,Approve'
+        additional-denied-words: 'rechazado,Rechazado,Rechazar,no,denied,deny'
+  deploy-android-playstore:
+        uses: ./.github/workflows/job-android-deploy.yaml
+        needs: approve-android-playstore
+        with:
+          os: ubuntu-latest
+          env: production
+          bucket: ${{ vars.AWS_BUCKET_PROD }}
+        secrets:
+          DEPLOY_KEY_FRACTTAL_CORE: ${{ secrets.DEPLOY_KEY_FRACTTAL_CORE }}
+          DEPLOY_KEY_PRINT_PACKAGE: ${{ secrets.DEPLOY_KEY_PRINT_PACKAGE }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # must be explicitly passed
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_PASSWORD: ${{ secrets.ANDROID_PASSWORD }}
+  approve-ios-testflight:
+    runs-on:  ubuntu-latest
+    needs: deploy-stage
+    steps:
+    - uses: trstringer/manual-approval@v1
+      with:
+        secret: ${{ github.TOKEN }}
+        approvers: 'mlondonog,emonto15,juan-segura-fracttal'
+        minimum-approvals: 1
+        issue-title: "Despliegue iOS v${{github.ref_name}} a TestFlight"
+        issue-body: "Por favor indique con 'Si' o 'Aprobado' si esta deacuerdo en desplegar versión: ${{github.ref_name}}"
+        exclude-workflow-initiator-as-approver: false
+        additional-approved-words: 'Si,si,aprobado,Aprobado,aprobar,Aprobar,Yes,Approved,Approve'
+        additional-denied-words: 'rechazado,Rechazado,Rechazar,no,denied,deny'
+  deploy-ios-testflight:
+    uses: ./.github/workflows/job-ios-build.yaml
+    needs: approve-ios-testflight
+    with:
+      env: production
+    secrets:
+      DEPLOY_KEY_FRACTTAL_CORE: ${{ secrets.DEPLOY_KEY_FRACTTAL_CORE }}
+      DEPLOY_KEY_PRINT_PACKAGE: ${{ secrets.DEPLOY_KEY_PRINT_PACKAGE }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # must be explicitly passed
+      IOS_KEY_ID: ${{ secrets.IOS_KEY_ID }}
+      IOS_ISSUER_ID: ${{ secrets.IOS_ISSUER_ID }}
+      IOS_KEY_CONTENT: ${{ secrets.IOS_KEY_CONTENT }}
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      MATCH_KEYCHAIN_PASSWORD: ${{ secrets.MATCH_KEYCHAIN_PASSWORD }} 

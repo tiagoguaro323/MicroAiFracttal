@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180" viewBox="0 0 180 180">
+  <defs>
+    <clipPath id="clip-Widget-candlestick">
+      <rect width="180" height="180"/>
+    </clipPath>
+  </defs>
+  <g id="Widget-candlestick" clip-path="url(#clip-Widget-candlestick)">
+    <g id="Grupo_7" data-name="Grupo 7" transform="translate(40 29)">
+      <g id="Grupo_6" data-name="Grupo 6" transform="translate(0 105.945) rotate(-90)">
+        <rect id="Rectángulo_7" data-name="Rectángulo 7" width="12.492" height="32.103" rx="3" transform="translate(32.103 44.035) rotate(90)" fill="#69f0ae"/>
+        <rect id="Rectángulo_3" data-name="Rectángulo 3" width="12.492" height="20.802" rx="3" transform="translate(68.74 0) rotate(90)" fill="#69f0ae"/>
+        <rect id="Rectángulo_12" data-name="Rectángulo 12" width="12.492" height="20.802" rx="3" transform="translate(60.64 88.069) rotate(90)" fill="#69f0ae"/>
+        <rect id="Rectángulo_4" data-name="Rectángulo 4" width="12.492" height="52.981" rx="3" transform="translate(52.981 22.017) rotate(90)" fill="#4687f1"/>
+        <rect id="Rectángulo_9" data-name="Rectángulo 9" width="12.492" height="52.981" rx="3" transform="translate(95.322 66.052) rotate(90)" fill="#4687f1"/>
+      </g>
+      <line id="Línea_1" data-name="Línea 1" y2="93.997" transform="translate(6.351 28.792)" fill="none" stroke="#69f0ae" stroke-width="3"/>
+      <line id="Línea_3" data-name="Línea 3" y2="93.997" transform="translate(50.386 28.792)" fill="none" stroke="#69f0ae" stroke-width="3"/>
+      <line id="Línea_5" data-name="Línea 5" y2="93.997" transform="translate(94.42 28.792)" fill="none" stroke="#69f0ae" stroke-width="3"/>
+      <line id="Línea_2" data-name="Línea 2" y2="122.789" transform="translate(28.368)" fill="none" stroke="#4687f1" stroke-width="3"/>
+      <line id="Línea_4" data-name="Línea 4" y2="122.789" transform="translate(72.403)" fill="none" stroke="#4687f1" stroke-width="3"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180" viewBox="0 0 180 180">
+  <defs>
+    <clipPath id="clip-Widget-scatter-dark">
+      <rect width="180" height="180"/>
+    </clipPath>
+  </defs>
+  <g id="Widget-scatter-dark" clip-path="url(#clip-Widget-scatter-dark)">
+    <g id="Grupo_12" data-name="Grupo 12" transform="translate(-2 4)">
+      <circle id="Elipse_4" data-name="Elipse 4" cx="3.5" cy="3.5" r="3.5" transform="translate(152 78)" fill="#b9f6ca"/>
+      <circle id="Elipse_6" data-name="Elipse 6" cx="3.5" cy="3.5" r="3.5" transform="translate(110 60)" fill="#b9f6ca"/>
+      <circle id="Elipse_7" data-name="Elipse 7" cx="3.5" cy="3.5" r="3.5" transform="translate(110 85)" fill="#b9f6ca"/>
+      <circle id="Elipse_8" data-name="Elipse 8" cx="3.5" cy="3.5" r="3.5" transform="translate(139 102)" fill="#b9f6ca"/>
+      <circle id="Elipse_9" data-name="Elipse 9" cx="3.5" cy="3.5" r="3.5" transform="translate(110 113)" fill="#b9f6ca"/>
+      <circle id="Elipse_11" data-name="Elipse 11" cx="3.5" cy="3.5" r="3.5" transform="translate(97 95)" fill="#b9f6ca"/>
+      <circle id="Elipse_12" data-name="Elipse 12" cx="3.5" cy="3.5" r="3.5" transform="translate(93 75)" fill="#b9f6ca"/>
+      <circle id="Elipse_13" data-name="Elipse 13" cx="3.5" cy="3.5" r="3.5" transform="translate(81 109)" fill="#6b9ff3" opacity="0.9"/>
+      <circle id="Elipse_22" data-name="Elipse 22" cx="3.5" cy="3.5" r="3.5" transform="translate(71 128)" fill="#6b9ff3" opacity="0.9"/>
+      <circle id="Elipse_14" data-name="Elipse 14" cx="3.5" cy="3.5" r="3.5" transform="translate(74 78)" fill="#6b9ff3" opacity="0.9"/>
+      <circle id="Elipse_20" data-name="Elipse 20" cx="3.5" cy="3.5" r="3.5" transform="translate(40 78)" fill="#6b9ff3" opacity="0.9"/>
+      <circle id="Elipse_18" data-name="Elipse 18" cx="3.5" cy="3.5" r="3.5" transform="translate(54 113)" fill="#6b9ff3" opacity="0.9"/>
+      <circle id="Elipse_15" data-name="Elipse 15" cx="3.5" cy="3.5" r="3.5" transform="translate(78 60)" fill="#6b9ff3" opacity="0.9"/>
+      <circle id="Elipse_16" data-name="Elipse 16" cx="3.5" cy="3.5" r="3.5" transform="translate(49 60)" fill="#6b9ff3" opacity="0.9"/>
+      <circle id="Elipse_17" data-name="Elipse 17" cx="3.5" cy="3.5" r="3.5" transform="translate(61 92)" fill="#6b9ff3" opacity="0.9"/>
+      <circle id="Elipse_19" data-name="Elipse 19" cx="3.5" cy="3.5" r="3.5" transform="translate(25 92)" fill="#6b9ff3" opacity="0.9"/>
+      <circle id="Elipse_10" data-name="Elipse 10" cx="3.5" cy="3.5" r="3.5" transform="translate(127 82)" fill="#b9f6ca"/>
+      <circle id="Elipse_21" data-name="Elipse 21" cx="3.5" cy="3.5" r="3.5" transform="translate(136 53)" fill="#b9f6ca"/>
+      <circle id="Elipse_23" data-name="Elipse 23" cx="3.5" cy="3.5" r="3.5" transform="translate(120 38)" fill="#b9f6ca"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,107 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Coverage files
+.nyc_output/
+coverage/
+instrumented/
+test-coverage/
+cypress/screenshots/
+dist/cypress/
+
+# production
+/build
+/dist
+
+# misc
+.DS_Store
+.devcontainer
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.eslintcache
+.package-lock.json
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+ios/App/App/public
+
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+
+## Other
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+#
+# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
+# Packages/
+# Package.pins
+.build/
+
+# CocoaPods
+#
+# We recommend against adding the Pods directory to your .gitignore. However
+# you should judge for yourself, the pros and cons are mentioned at:
+# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
+#
+ios/App/Pods/
+
+# Carthage
+#
+# Add this line if you want to avoid checking in source code from Carthage dependencies.
+# Carthage/Checkouts
+
+ios/App/Carthage/Build
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/#source-control
+
+ios/App/fastlane/report.xml
+ios/App/fastlane/Preview.html
+ios/App/fastlane/screenshots
+ios/App/fastlane/test_output
+iOS/DerivedData/*
+
+# Backup files
+*.bak
+cypress.config.ts.bak
+cypress/support/e2e.js.bak
+
+# Demo Files
+cypress/e2e/basic/demo.cy.js
+cypress/e2e/cobertura/
+
+# Cypress artifacts
+cypress/videos/

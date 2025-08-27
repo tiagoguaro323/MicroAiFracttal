@@ -1,0 +1,11 @@
+name: 'NodeJS Version Action'
+description: 'Gets the NodeJS version'
+author: 'Edwin Montoya <edwin.montoya@fracttal.com>'
+runs:
+  using: "composite"
+  steps:
+  - name: Setup Node.js environment
+    uses: actions/setup-node@v4.0.2
+  - name: NodeJS Version
+    shell: bash
+    run: node --version

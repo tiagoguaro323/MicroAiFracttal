@@ -1,0 +1,4 @@
+#!/bin/sh
+export PATH="/opt/homebrew/bin:$PATH"
+. "$(dirname "$0")/_/husky.sh"
+# npx lint-staged

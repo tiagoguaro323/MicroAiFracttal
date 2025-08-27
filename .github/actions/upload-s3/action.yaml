@@ -1,0 +1,21 @@
+name: 'Upload folder to S3'
+description: 'Upload folder to S3 bucket'
+author: 'Edwin Montoya <edwin.montoya@fracttal.com>'
+inputs:
+  s3-url:
+    description: 'S3 URL'
+    required: true
+    default: s3://fracttal-one-eu-dev/default/
+  source-folder:
+    description: 'Folder to upload'
+    required: true
+runs:
+  using: "composite"
+  steps:
+  - name: "Upload file to S3 default"
+    shell: bash
+    run: |-
+      aws s3 sync ${{ inputs.source-folder }} ${{ inputs.s3-url }} \
+      --acl public-read \
+      --cache-control "max-age=86400"
+

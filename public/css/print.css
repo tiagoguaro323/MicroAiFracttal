@@ -1,0 +1,273 @@
+
+.pagePrint{
+    font-size: 3.175mm !important;
+    font-family: 'Arial', sans-serif !important;
+    font-weight: 400 !important;
+    background:white;  
+    page-break-after: always;
+    position: relative;
+    padding: 3mm ;   
+    border-radius: 10px;
+}
+
+.margin{
+    padding: 10mm;
+}
+
+.A4{
+    width:210mm;
+    height:297mm;
+}
+
+.letter{
+    width:216mm ;
+    height:279mm ;
+}
+
+.folio{
+    width:216mm;
+    height:330mm;
+}
+
+.legal{
+    width:216mm;
+    height:356mm;
+}
+
+/** Header Document ***/
+.headerPrint  {
+    padding: 5mm 5mm 0 5mm;
+    width: 100%;    
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.headerPrintWO  {
+    padding: 5mm;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.centerPrint {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerLeftPrint {
+    width: 29%;
+    position: relative;
+    left: 0;
+}
+
+.headerLogoPrint {
+    width: 180px;
+    height: 100px;
+}
+
+.headerCenterPrint {
+    position: relative;
+    width: 44%;
+    top:2.64mm;
+}
+
+.headerCenterPrint td {
+    text-align: center;
+    padding-top: 0.529mm;
+}
+
+.headerRightPrint {
+    position: relative;
+    top: 5%;
+    width: 24%;
+    right: 0;
+}
+
+.headerRightPrint td {    
+    padding-top: 0.52mm;
+    padding-right: 1.32mm;
+}
+
+/*** form css ***/
+.formPrint {
+    width: 98%;
+    margin: 1.32mm;  
+    border-collapse: collapse;
+}
+
+.formPrint:first-child th {
+    border-bottom: solid 0.26mm #757575;
+    text-transform : capitalize;
+    font-weight: bold;
+    padding: 1.32mm;
+}
+
+.formPrint td {
+    padding: 1.058mm;
+}
+
+/*** Table Css ****/
+.tablePrint {
+    border: 0.26mm solid #757575;
+    width: 98%;
+    margin: 1.32mm;
+    border-collapse: collapse;
+}
+
+.tablePrint tr:first-child th {
+    text-align: center;
+}
+
+.tablePrint th {
+    border: 0.26mm solid #757575;
+    text-align: left;
+    padding: 1.058mm;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.tablePrint td {
+    border: 0.26mm solid #757575;
+    padding: 0.52mm;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.footerPrint {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 6mm;
+    page-break-after: always;
+    padding: 10px
+}
+
+
+.formTablePrint {    
+    border: 0.26mm solid #757575;
+    width: 98%;
+    margin: 1.32mm;
+    border-collapse: collapse;
+}
+
+.formTablePrint td {
+    border: 0.26mm solid #757575;
+    padding: 0.52mm;
+}
+
+.tdTableImg {
+    height: 80.7mm;
+}
+
+.middleWidth td{
+    width: 50%;
+}
+
+.subTitle{
+    font-size: 5.292mm;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.Redcolor {
+    color: red;
+}
+
+.borderTable{
+    border: 0.26mm solid #757575;
+}
+
+.withOutBorder{
+    border: none !important;
+}
+
+.size {
+    font-size: 3.175mm;
+}
+
+.textProperty{
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.boldText {
+    font-weight: bold;
+}
+
+.borderRadius{
+    border-radius: 1.32mm;
+    border-collapse: initial;
+}
+
+.img-attachment{
+    padding: 1.32mm;
+    max-width: 430px;
+    max-height: 290px;
+    width: auto;
+    height: auto;
+}
+
+.img-attachment-ortiz{
+    padding: 1.32mm;
+    max-width: 200px;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+}
+
+.signatureTable {
+    border: 0.26mm solid #757575;
+    width: 96%;   
+    position: absolute;
+    bottom:8.5mm;
+    margin: 1.5mm;
+}
+
+.sumaryTable {
+    border: 0.26mm solid #757575;
+    width: 96%;   
+    position: absolute;
+    bottom:24mm;
+    margin: 1.5mm;
+}
+
+.wbEnableSelect{
+    -webkit-touch-callout: auto !important;         
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+.wbDisableSelect{
+    -webkit-touch-callout: none !important;         
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+
+
+
+.alignSignature{
+    text-align: center;
+    vertical-align: bottom;
+}
+
+@page{
+    margin: 0mm !important;
+}
+
+@media print{    
+    @media print and (color){
+        *{
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }     
+}

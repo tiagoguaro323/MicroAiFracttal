@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html translate="no">
+
+<head>
+
+
+  <meta charset="utf-8" />
+  <meta name="google" content="notranslate" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <meta name="viewport"
+    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#D1D1D1" />
+
+
+  <link rel="apple-touch-icon" href="/images/isotipo-fracttal-color.png">
+  <link rel="manifest" href="/manifest.json" />
+  <title>Fracttal One</title>
+  <link rel="stylesheet" href="/css/loading.css" />
+  <link rel="stylesheet" href="/css/print.css" />
+  <link rel="stylesheet" href="/css/workOrder4.css" />
+  <link rel="stylesheet" href="/css/workOrder5.css" />
+
+  <link rel="preload" as="font" href="/fonts/fracttal-font.ttf" crossorigin="anonymous">
+  <!-- your index.html -->
+  <script>
+    /**
+     * error: global is not defined
+     */
+    var global = global || window
+  </script>
+
+  <style>
+    @font-face {
+      font-family: "FracttalFont";
+      src: url("/fonts/fracttal-font.ttf") format("truetype");
+    }
+
+    .data-edited {
+      background: url("/images/dirty.png") left top no-repeat;
+    }
+  </style>
+
+
+  <script>
+    !function () {
+      var analytics = window.analytics = window.analytics || []; if (!analytics.initialize) if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice."); else {
+        analytics.invoked = !0; analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on", "addSourceMiddleware", "addIntegrationMiddleware", "setAnonymousId", "addDestinationMiddleware"]; analytics.factory = function (e) { return function () { var t = Array.prototype.slice.call(arguments); t.unshift(e); analytics.push(t); return analytics } }; for (var e = 0; e < analytics.methods.length; e++) { var key = analytics.methods[e]; analytics[key] = analytics.factory(key) } analytics.load = function (key, e) { var t = document.createElement("script"); t.type = "text/javascript"; t.async = !0; t.src = "https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js"; var n = document.getElementsByTagName("script")[0]; n.parentNode.insertBefore(t, n); analytics._loadOptions = e }; analytics._writeKey = "IyWWwh7hirg2xt1YaF2KtANbnpFX4nL0";; analytics.SNIPPET_VERSION = "4.15.3";
+        analytics.load("IyWWwh7hirg2xt1YaF2KtANbnpFX4nL0");
+      }
+    }();
+  </script>
+
+  <script>
+    var beamer_config = {
+      product_id: 'OUsXweKE43037',
+      selector: '.beamerButton',
+      button: false,
+      auto: false
+    };
+  </script>
+  <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js" defer="defer"></script>
+
+  <script src="/buffer.js"></script>
+
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div class="ipl-progress-indicator" id="ipl-progress-indicator">
+    <div class="ipl-progress-indicator-head">
+      <div class="first-indicator"></div>
+      <div class="second-indicator"></div>
+    </div>
+    <div class="insp-logo-frame" style="text-align: center;font-family: FracttalFont;font-size:100px; color: #e0e0e0;">
+      f
+    </div>
+  </div>
+  <div id="root"></div>
+
+  <script type="module" src="/src/index.tsx"></script>
+  <script src="https://status.fracttal.com/embed/script.js"></script>
+</body>
+
+</html>

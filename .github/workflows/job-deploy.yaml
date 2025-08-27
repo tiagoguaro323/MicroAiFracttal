@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+      env:
+        required: true
+        type: string
+      bucket:
+        required: true
+        type: string
+      folder:
+        required: false
+        type: string
+    secrets:
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+    
+
+jobs:
+  upload-s3:
+    runs-on: ${{ inputs.os }}
+    environment: ${{ inputs.env }}
+    steps:
+    - uses: actions/checkout@v4
+      id: checkout
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4.0.2
+      with:
+        aws-region: ${{ vars.AWS_REGION }}
+        aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - uses: ./.github/actions/restore-cache
+      id: cache-build-restore
+      with:
+        key: build-${{ github.sha }}-${{ github.ref_name }}
+        path: ./build
+    - name: Transform folder (case tag)
+      run: echo "GITHUB_FOLDER_S3=$(echo "${{ inputs.folder }}" | sed -e 's,\.,-,g')" >> $GITHUB_ENV
+    - name: Upload file to S3 ${{ inputs.folder }}
+      uses: ./.github/actions/transfer-s3
+      with:
+        destination: s3://${{ inputs.bucket }}/${GITHUB_FOLDER_S3}
+        source: ./build

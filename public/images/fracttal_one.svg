@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56.205" height="62.156" viewBox="0 0 56.205 62.156">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-0.299" y1="-0.143" x2="4.232" y2="3.503" gradientUnits="objectBoundingBox">
+      <stop offset="0.095" stop-color="#0089fb"/>
+      <stop offset="0.287" stop-color="#b452e1"/>
+      <stop offset="0.648" stop-color="#ff3b44"/>
+      <stop offset="1" stop-color="#ffd200"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-0.247" y1="-0.101" x2="2.428" y2="2.051" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0089fb"/>
+      <stop offset="0.287" stop-color="#b452e1"/>
+      <stop offset="0.648" stop-color="#ff3b44"/>
+      <stop offset="1" stop-color="#ffd200"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="-0.763" y1="-0.517" x2="1.912" y2="1.636" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-4" x1="-1.211" y1="-0.877" x2="1.464" y2="1.276" xlink:href="#linear-gradient-2"/>
+  </defs>
+  <g id="isotipo-fracttal-one" transform="translate(-58 -43)">
+    <g id="Grupo_314" data-name="Grupo 314" transform="translate(58 43)">
+      <circle id="Elipse_1497" data-name="Elipse 1497" cx="6.85" cy="6.85" r="6.85" transform="translate(0 20.138)" fill="url(#linear-gradient)"/>
+      <circle id="Elipse_1498" data-name="Elipse 1498" cx="11.602" cy="11.602" r="11.602" transform="translate(18.154 0)" fill="url(#linear-gradient-2)"/>
+      <path id="Trazado_2033" data-name="Trazado 2033" d="M90.157,165.2a11.6,11.6,0,1,0,11.6,11.6A11.6,11.6,0,0,0,90.157,165.2Z" transform="translate(-72.003 -126.251)" fill="url(#linear-gradient-3)"/>
+      <path id="Trazado_2034" data-name="Trazado 2034" d="M173.133,128.8a11.6,11.6,0,1,0,11.6,11.6A11.6,11.6,0,0,0,173.133,128.8Z" transform="translate(-128.531 -101.454)" fill="url(#linear-gradient-4)"/>
+    </g>
+  </g>
+</svg>

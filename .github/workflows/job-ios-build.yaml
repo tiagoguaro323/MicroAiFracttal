@@ -1,0 +1,89 @@
+name: Build/Deploy iOS
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        required: false
+        type: string
+    secrets:
+        MATCH_PASSWORD:
+          required: true
+        MATCH_KEYCHAIN_PASSWORD:
+          required: true
+        DEPLOY_KEY_FRACTTAL_CORE:
+          required: true
+        DEPLOY_KEY_PRINT_PACKAGE:
+          required: true
+        AWS_SECRET_ACCESS_KEY:
+          required: true
+        IOS_KEY_ID:
+          required: true
+        IOS_ISSUER_ID:
+          required: true
+        IOS_KEY_CONTENT:
+          required: true
+jobs:
+  build-deploy-ios:
+    runs-on: macos-latest
+    environment: ${{ inputs.env }}
+    env: 
+      IOS_KEY_ID: ${{ secrets.IOS_KEY_ID }}
+      IOS_ISSUER_ID: ${{ secrets.IOS_ISSUER_ID }}
+      IOS_KEY_CONTENT: ${{ secrets.IOS_KEY_CONTENT }}
+      GITHUB_BUILD_NUMBER: ${{ github.run_number }}
+      GITHUB_TAG: ${{ github.ref_name }}
+      AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_BUCKET: ${{ vars.AWS_BUCKET_IOS }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      MATCH_KEYCHAIN_PASSWORD: ${{ secrets.MATCH_KEYCHAIN_PASSWORD }}
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ./.github/actions/nodejs-version
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1.180.1
+      with:
+        ruby-version: 3.3
+        bundler-cache: true
+    - name: Select Xcode 16
+      run: sudo xcode-select -s /Applications/Xcode_16.2.app
+    - name: Update cocoapods
+      run: |-
+        env
+        gem install cocoapods
+        pod --version
+    - id: install-private-dependencies
+      uses: ./.github/actions/install-private-dependencies
+      with:
+        deploy-key-fracttal-core: ${{ secrets.DEPLOY_KEY_FRACTTAL_CORE }}
+        deploy-key-print-package: ${{ secrets.DEPLOY_KEY_PRINT_PACKAGE }}
+    - uses: ./.github/actions/restore-cache
+      id: cache-modules-restore
+      with:
+        key: dependency-cache-${{ runner.arch }}-${{ hashfiles('package.json') }}
+        path: ./node_modules
+    - if: steps.cache-modules-restore.outputs.cache-hit != 'true'
+      uses: ./.github/actions/install-dependencies
+    - if: steps.cache-modules-restore.outputs.cache-hit != 'true'
+      uses: ./.github/actions/save-cache
+      id: cache-modules-save
+      with:
+        key: dependency-cache-${{ runner.arch }}-${{ hashfiles('package.json') }}
+        paths: |
+          ./node_modules
+    - uses: ./.github/actions/create-info
+    - uses: ./.github/actions/build-native-app
+    - name: Build iOS Version
+      run: |-
+        echo "Version Name: $GITHUB_TAG"
+        ESCAPED_REPLACE=$(printf '%s' "${GITHUB_TAG}" | sed -e 's/[\.&]//g')
+        sed -i -e "s/__TAG__/$GITHUB_TAG/" ios/App/App/Info.plist
+    - name: Install fastlane
+      run: gem install fastlane
+    - name: Upload to testflight
+      run: |-
+        cd ios/App
+        fastlane upload_testflight

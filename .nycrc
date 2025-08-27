@@ -1,0 +1,16 @@
+{
+  "include": [
+    "src/**/*.{js,jsx,ts,tsx}"
+  ],
+  "exclude": [
+    "**/*.spec.{js,jsx,ts,tsx}", 
+    "**/*.test.{js,jsx,ts,tsx}",
+    "**/*.cy.{js,jsx,ts,tsx}",
+    "**/node_modules/**",
+    "src/index.tsx",
+    "src/reportWebVitals.ts"
+  ],
+  "report-dir": "./coverage",
+  "temp-dir": "./.nyc_output",
+  "all": true
+}

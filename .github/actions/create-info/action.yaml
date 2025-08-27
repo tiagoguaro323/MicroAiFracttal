@@ -1,0 +1,21 @@
+name: 'Create deploy-info.json action 📝'
+description: 'Creates the deploy-info.json file with the necessary information for the deployment'
+author: 'Edwin Montoya <edwin.montoya@fracttal.com>'
+runs:
+  using: "composite"
+  steps:
+  - name: Building deploy-info.json
+    shell: bash
+    run: |-
+      GITHUB_BRANCH=$(git branch -r --contains ${{ github.ref_name }})
+      GITHUB_TAG=${{ github.ref_name }}
+      echo "GITHUB_TAG=$GITHUB_TAG" >> $GITHUB_ENV
+      echo "Branch Name: $GITHUB_BRANCH"
+      echo "Version Name: ${{ github.ref_name }}"
+      ESCAPED_REPLACE=$(printf '%s' "${GITHUB_BRANCH#origin/:-master}" | sed -e 's/[\/&]/\\&/g')
+      sed -i -e "s/___TIMEST___/$(date -u '+%Y-%m-%dT%H:%M:%SZ')/" src/deploy-info.json
+      sed -i -e "s/___BRANCH___/$ESCAPED_REPLACE/" src/deploy-info.json
+      sed -i -e "s/___COMMIT___/$GITHUB_SHA/" src/deploy-info.json
+      sed -i -e "s/___TAG___/$GITHUB_TAG/" src/deploy-info.json
+      echo "$(cat src/deploy-info.json)"
+      cp src/deploy-info.json public

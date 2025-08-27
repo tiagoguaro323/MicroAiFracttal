@@ -1,0 +1,40 @@
+name: Develop workflow
+
+on:
+  push:
+    branches:
+      - "!master"
+    tags:
+      '5.[0-9].[0-9][0-9]?-dev.[0-9][0-9]?' # 5.0.00-dev.01
+jobs:
+  build-develop:
+    uses: ./.github/workflows/job-build.yaml
+    with:
+      os: ubuntu-latest
+      env: development
+    secrets:
+      DEPLOY_KEY_FRACTTAL_CORE: ${{ secrets.DEPLOY_KEY_FRACTTAL_CORE }}
+      DEPLOY_KEY_PRINT_PACKAGE: ${{ secrets.DEPLOY_KEY_PRINT_PACKAGE }}
+  deploy-dev:
+    uses: ./.github/workflows/job-deploy.yaml
+    needs: build-develop
+    with:
+      os: ubuntu-latest
+      env: development
+      bucket: ${{ vars.AWS_BUCKET_DEV }}
+      folder: '${{ github.ref_name }}/'
+    secrets:
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # must be explicitly passed
+  deploy-develop:
+    strategy:
+      matrix:
+        folder: ['', 'default/']
+    needs: build-develop
+    uses: ./.github/workflows/job-deploy.yaml
+    with:
+      os: ubuntu-latest
+      env: development
+      bucket: ${{ vars.AWS_BUCKET_DEVELOP }}
+      folder: ${{ matrix.folder }}
+    secrets:
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # must be explicitly pass

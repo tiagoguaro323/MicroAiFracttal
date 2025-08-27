@@ -1,0 +1,50 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+      env:
+        required: false
+        type: string
+    secrets:
+      DEPLOY_KEY_FRACTTAL_CORE:
+        required: true
+      DEPLOY_KEY_PRINT_PACKAGE:
+        required: true
+jobs:
+  build:
+    runs-on: ${{ inputs.os }}
+    environment: ${{ inputs.env }}
+    steps:
+    - uses: actions/checkout@v4
+      id: checkout
+    - uses: ./.github/actions/nodejs-version
+    - id: install-private-dependencies
+      uses: ./.github/actions/install-private-dependencies
+      with:
+        deploy-key-fracttal-core: ${{ secrets.DEPLOY_KEY_FRACTTAL_CORE }}
+        deploy-key-print-package: ${{ secrets.DEPLOY_KEY_PRINT_PACKAGE }}
+    - id: cache-modules-restore
+      uses: ./.github/actions/restore-cache
+      with:
+        key: dependency-cache-${{ runner.arch }}-${{ hashfiles('package.json') }}
+        path: ./node_modules
+    - if: steps.cache-modules-restore.outputs.cache-hit != 'true'
+      uses: ./.github/actions/install-dependencies
+    - id: cache-modules-save
+      uses: ./.github/actions/save-cache
+      with:
+        key: dependency-cache-${{ runner.arch }}-${{ hashfiles('package.json') }}
+        paths: |
+          ./node_modules
+    - uses: ./.github/actions/create-info
+    - uses: ./.github/actions/build-app
+    - id: cache-build-save
+      uses: ./.github/actions/save-cache
+      with:
+        key: build-${{ github.sha }}-${{ github.ref_name }}
+        paths: |
+          ./build

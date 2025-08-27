@@ -1,0 +1,9 @@
+name: 'Install Dependencies 📦'
+description: 'Installs the dependencies of the project'
+author: 'Edwin Montoya <edwin.montoya@fracttal.com>'
+runs:
+  using: "composite"
+  steps:
+  - name: Install Dependencies 📦
+    shell: bash
+    run: npm install --force

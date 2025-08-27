@@ -1,0 +1,53 @@
+name: "Install Private Dependencies"
+description: "Clone and install private dependencies for Fracttal React"
+inputs:
+  deploy-key-fracttal-core:
+    description: "SSH key for Fracttal Core"
+    required: true
+  deploy-key-print-package:
+    description: "SSH key for fracttal-print-package"
+    required: true
+  print-package-version:
+    description: "Version of fracttal-print-package to checkout"
+    required: false
+    default: "1.0.3"
+runs:
+  using: "composite"
+  steps:
+    - name: Cache fracttal-print-package
+      id: cache-print-package
+      uses: actions/cache@v4
+      with:
+        path: ../fracttal-print-package
+        key: fracttal-print-package-${{ inputs.print-package-version }}-${{ runner.arch }}
+        restore-keys: |
+          fracttal-print-package-${{ inputs.print-package-version }}-
+          fracttal-print-package-
+
+    - name: Set up SSH for fracttal-print-package
+      if: steps.cache-print-package.outputs.cache-hit != 'true'
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ inputs.deploy-key-print-package }}
+
+    - name: Clone and prepare fracttal-print-package
+      if: steps.cache-print-package.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        cd ..
+        git clone git@github.com:Fracttal-Tech-S-L/fracttal-print-package.git
+        cd fracttal-print-package
+        git checkout semver:${{ inputs.print-package-version }} || git checkout tags/${{ inputs.print-package-version }} || git checkout main
+        npm run build
+        cd ../FracttalReactV5
+
+    - name: Update package.json with local path for fracttal-print-package
+      shell: bash
+      run: |
+        jq '.dependencies["fracttal-print-package"] = "file:../fracttal-print-package"' package.json > package.json.tmp
+        mv package.json.tmp package.json
+
+    - name: Set up SSH for Fracttal Core
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ inputs.deploy-key-fracttal-core }}

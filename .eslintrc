@@ -1,0 +1,152 @@
+{
+  "parser": "@typescript-eslint/parser", // Specifies the ESLint parser
+  "env": {
+    "browser": true,
+    "jasmine": true,
+    "jest": true,
+    "cypress/globals": true
+  },
+  "globals": {
+    "pendo": true
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "prettier",
+    "cypress" 
+  ],
+  "extends": [
+    "airbnb",
+    "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
+    "plugin:@typescript-eslint/recommended", // Uses the recommended rules from @typescript-eslint/
+    "prettier",
+    "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:cypress/recommended" 
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
+    "sourceType": "module" // Allows for the use of imports
+  },
+  "rules": {
+    "radix": "off",
+    "no-plusplus": "off",
+    "prefer-destructuring": "warn",
+    "default-case": "off",
+    "no-shadow": "off",
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true
+      }
+    ],
+    "no-empty-function": [
+      "error",
+      {
+        "allow": [
+          "arrowFunctions"
+        ]
+      }
+    ],
+    "no-param-reassign": "off",
+    "prettier/prettier": ["error", {
+    "endOfLine":"auto"
+  }],
+    "no-use-before-define": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never",
+        "js": "never",
+        "jsx": "never",
+        "mjs": "never"
+      }
+    ],
+    "react/jsx-wrap-multilines": "off",
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
+    ],
+    "react/require-default-props": "off",
+    "react/jsx-curly-newline": "off",
+    "react/prop-types": "off",
+    "react/display-name": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/function-component-definition": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/alt-text": "off",
+    "jsx-a11y/iframe-has-title": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "no-restricted-exports": "off",
+     "import/no-unresolved": [
+      "error",
+      {
+        "ignore": ["^remoteApp/", "^local/"]
+      }
+    ]
+  //   "no-restricted-exports": ["error", {
+  //     "restrictedNamedExports": [
+  //         "then"
+  //         // no "default" here
+  //     ],
+  //     "restrictDefaultExports": {
+  //         "direct": false, // 1. export default foo; export default 42; export default function foo() {}
+  //         "named": true, // 2. export { foo as default };
+  //         "defaultFrom": false, // 3. export { default } from "mod"; export { default as default } from "mod";
+  //         "namedFrom": false, // 4. export { foo as default } from "mod";
+  //         "namespaceFrom": true // 5. export * as default from "mod"
+  //     }
+  // }]
+    // "max-lines": ["error", {"max": 700, "skipBlankLines": true, "skipComments": true}]
+  },
+  "overrides": [
+    {
+      "files": ["cypress/**/*.{js,jsx,ts,tsx}", "cypress.config.ts", "vite.config.ts"],
+      "rules": {
+        "import/no-extraneous-dependencies": "off",
+        "cypress/no-unnecessary-waiting": "warn",
+        "no-underscore-dangle": "off",
+        "no-console": "warn",
+        "global-require": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-unused-vars": "warn",
+        "spaced-comment": "warn",
+        "cypress/unsafe-to-chain-command": "warn",
+        "prefer-destructuring": "warn"
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
+    },
+    "import/resolver": {
+      "node": {
+        "paths": [
+          "src"
+        ],
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
+    }
+  }
+}

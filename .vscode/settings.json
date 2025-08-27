@@ -1,0 +1,30 @@
+{
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    "prettier.endOfLine": "lf",
+    "files.exclude": {
+        "**/.DS_Store": false,
+        "**/bitbucket-pipelines.yml": true,
+        "**/node_modules": true,
+        "**/package-lock.json": true,
+        "**/tsconfig.json": true,
+        "**/web.config": true
+    },
+    "todohighlight.include": [
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.html",
+        "**/*.php",
+        "**/*.css",
+        "**/*.scss"
+    ],
+    "i18n-ally.localesPaths": [
+        "src/core/i18n",
+        "src/core/i18n/languages"
+    ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "https-sonar-fracttal-com-",
+        "projectKey": "Fracttal-Tech-S-L_FracttalReactV5_4688cdf2-10b9-4b58-9fb7-8fc2b5466d48"
+    },
+}

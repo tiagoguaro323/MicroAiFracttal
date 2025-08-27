@@ -1,0 +1,50 @@
+# 
+# Build and Deploy React Application to GitHub Pages
+#
+image: node:14.17.0
+
+pipelines:
+  tags:
+    '*.*.*':
+    - step:
+            name: Build and test
+            caches:
+              - node
+            size: 2x
+            script:
+              - node -v
+              - npm install
+              - rm -rf .git
+              - npm --version
+              - sed -i -e "s/___TIMEST___/$(date -u '+%Y-%m-%dT%H:%M:%SZ')/" src/deploy-info.json
+              - sed -i -e "s/___BRANCH___/$BITBUCKET_BRANCH/" src/deploy-info.json
+              - sed -i -e "s/___COMMIT___/$BITBUCKET_COMMIT/" src/deploy-info.json
+              - sed -i -e "s/___TAG___/$BITBUCKET_TAG/" src/deploy-info.json
+              - cp src/deploy-info.json public
+              - CI=false GENERATE_SOURCEMAP=false npm run web:build
+            # defining the artifacts to be passed to each future step.
+            artifacts: 
+              - build/**
+    - step:
+            name: Deploy to S3 Develop
+            script:
+              - pipe: atlassian/aws-s3-deploy:1.1.0
+                variables:
+                  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                  AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                  AWS_DEFAULT_REGION: 'us-east-1'
+                  S3_BUCKET: 'fracttal-one-develop'
+                  LOCAL_PATH: 'build'               
+    - step:
+            name: Deploy to S3 Production
+            trigger: manual
+            script:
+              - pipe: atlassian/aws-s3-deploy:1.1.0
+                variables:
+                  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                  AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                  AWS_DEFAULT_REGION: 'us-east-1'
+                  S3_BUCKET: 'fracttal-one-static'
+                  LOCAL_PATH: 'build'
+
+          

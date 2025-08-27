@@ -1,0 +1,23 @@
+name: 'Cache dependencies action'
+description: 'Cache dependencies for the CI VM'
+author: 'Edwin Montoya <edwin.montoya@fracttal.com>'
+inputs:
+  paths:
+    description: 'Paths to cache'
+    required: true
+    default: |
+      ./node_modules
+  key:
+    description: 'Unique key to store/retrieve the cache'
+    required: true
+    default: |
+      dependency-cache-${{ runner.arch }}-${{ hashfiles('package.json') }}
+runs:
+  using: "composite"
+  steps:
+  - name: Save cache
+    id: cache-modules-save
+    uses: actions/cache/save@v4
+    with:
+      path: ${{ inputs.paths }}
+      key: ${{ inputs.key }}

@@ -1,0 +1,98 @@
+.containers {
+    background-color: #F6FAFF;
+    border-radius: 8px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    width: 95%;
+    margin-top: 5px;
+}
+
+.generalInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.tdTextColor {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+
+.cellTablesFormat4 {
+    padding-bottom: 0;
+    vertical-align: top;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+.headerFormat4{
+    border-radius: 8px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    width: 95%;
+    margin-top: 5px;
+}
+
+.signatureFormat4 {
+    background-color: #F6FAFF;
+    border-radius: 8px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    width: 92%;
+    margin-top: 5px;
+    margin-bottom: 30px;
+    position: absolute;
+    bottom:8.5mm;
+}
+
+.tableHeaderPrint {
+    background-color: #F6FAFF;
+    padding: 10px;
+    text-align: start;  
+}
+
+.tableCellPrintFormat4 {
+    border-bottom: 2px solid #edeff1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 500px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.tablePrintFormat4 {
+    border-radius: 8px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    width: 95%;
+    margin-top: 5px;
+    border-collapse: collapse;
+}
+
+.tdTableImg4 {
+    height: 199px;
+    border-bottom: 2px solid #edeff1;
+}
+
+
+.img-attachment4 {
+    width: auto;
+    height: auto;
+    max-width: 550px;
+    max-height: 160px;
+    border-radius: 8px; 
+    border: 1px solid #edeff1
+
+}
+.footerFormat4 {
+    position: absolute;
+    width: 95%;
+    bottom: 0;
+    height: 6mm;
+    page-break-after: always;
+    padding: 10px;
+    margin-left: 7px;
+    
+}
+

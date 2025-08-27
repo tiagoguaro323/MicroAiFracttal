@@ -1,0 +1,334 @@
+name: Cypress Tests and SonarQube Scan
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run tests against'
+        required: true
+        default: 'develop'
+      specs:
+        description: 'Test specs to run (leave empty for auto-detection)'
+        required: false
+        default: ''
+  push:
+    branches:
+      - develop
+    tags:
+      - '5.[0-9].[0-9][0-9]?-dev.[0-9][0-9]?'
+  pull_request:
+    branches:
+      - master
+jobs:
+  determinate-tests:
+    environment: 
+      name: development
+    runs-on: ubuntu-latest
+    outputs:
+      specs: ${{ steps.get_tests.outputs.specs }}
+      containers: ${{ steps.get_tests.outputs.containers }}
+      branch_name: ${{ steps.get-branch.outputs.branch_name }}
+
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Get branch from tag or PR
+        id: get-branch
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # If it's a PR, use the base ref (target branch)
+            BRANCH_NAME="${{ github.base_ref }}"
+          else
+            # If it's a tag push, get the branch from the tag (only last match)
+            BRANCH_NAME=$(git branch -r --contains ${{ github.ref }} | grep -v HEAD | sed -e 's/^.*origin\///' | tail -n 1)
+          fi
+          # Clean any whitespace
+          BRANCH_NAME=$(echo "$BRANCH_NAME" | tr -d '[:space:]')
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "Branch Name: $BRANCH_NAME"
+
+      - name: Determine test folders
+        id: get_tests
+        run: |
+          # initialize variable to detect modules without tests
+          missing_tests=0
+          
+          echo "Evento: ${{ github.event_name }}"
+          echo "Rama base: ${{ github.base_ref }}"
+
+          # Run all tests if it's a PR to develop
+          if [[ "${{ github.event_name }}" == "pull_request" && ("${{ github.base_ref }}" == "develop" || "${{ github.base_ref }}" == "master") ]]; then
+            echo "📝 PR to develop/master detected - Running all tests"
+            specs_list=("cypress/e2e/**/*.cy.{js,jsx,ts,tsx}")
+            force_all_tests=true
+          else
+            force_all_tests=false
+            CHANGED_FILES=$(git diff --name-only origin/develop...HEAD)
+            echo "🔍 Files changed:"
+            echo "$CHANGED_FILES"
+            
+            specs_list=()
+            declare -A processed_modules
+            
+            while read -r file; do
+              # Ignore files that don't need testing
+              if [[ "$file" == "android/"* ]] || \
+                [[ "$file" == "ios/"* ]] || \
+                [[ "$file" == "build/"* ]] || \
+                [[ "$file" == "public/"* ]] || \
+                [[ "$file" == "node_modules/"* ]] || \
+                [[ "$file" == "cypress/"* ]] || \
+                [[ "$file" == .* ]] || \
+                [[ "$file" == *.json ]] || \
+                [[ "$file" == *.ts ]] || \
+                [[ "$file" == *.properties ]]; then
+                echo "⏭️ Ignoring file: $file"
+                continue
+              fi
+              
+              # Process only changes in source code
+              if [[ "$file" == "src/"* ]]; then
+                src_module=$(echo $file | awk -F'src/' '{print $2}' | cut -d'/' -f1)
+                if [[ ! -z "$src_module" && -z "${processed_modules[$src_module]}" ]]; then
+                  echo "📁 Module source found: $src_module"
+                  # Search related tests based on module name
+                  if [[ -d "cypress/e2e/$src_module" ]]; then
+                    cypress_path="cypress/e2e/$src_module/**/*.cy.{js,jsx,ts,tsx}"
+                    specs_list+=("$cypress_path")
+                    processed_modules[$src_module]=1
+                    else
+                    # If we don't find a direct corresponding folder
+                    echo "❌ ERROR: No specific tests found for the changes made"
+                    echo "📝 Modified modules are:"
+                    echo "   - Module: $src_module"
+                    echo "   - Path: $file"
+                    echo "⚠️ REMINDER: All development must include corresponding Cypress tests"
+                    echo "🔍 Tests should be in: cypress/e2e/$src_module/"
+                    # Store the error to display at the end
+                    missing_tests=1
+                  fi
+                fi
+              fi
+            done <<< "$CHANGED_FILES"
+            
+            # Check if there are modules without tests
+            if [[ "$missing_tests" -eq 1 ]]; then
+              echo "⚠️ WARNING: Changes detected in modules without Cypress tests"
+              echo "📝 Corresponding tests are required for modified modules"
+              echo "📌 No Cypress tests will be executed"
+              # Set specs_string as empty so no tests will run
+              specs_string=""
+            else
+              # If no specific tests were found, decide based on the tag
+              if [ ${#specs_list[@]} -eq 0 ]; then
+                if [[ "${{ github.ref }}" == *-dev* ]]; then
+                  echo "⚠️ No specific modules found and this is a development tag, no tests will be executed"
+                  specs_string=""
+                  # Debug: Uncomment next line to run specific tests
+                  # specs_list+=("cypress/e2e/login/login.cy.js,cypress/e2e/Inventories/Digitals/digital_create.cy.js")
+                else
+                  echo "⚠️ No specific modules found, all tests will be run"
+                  specs_list+=("cypress/e2e/**/*.cy.{js,jsx,ts,tsx}")
+                fi
+              fi
+              
+              # Convert specs list to string only if there are no modules without tests
+              specs_string=$(IFS=,; echo "${specs_list[*]}")
+              echo "🧪 Specs to test: $specs_string"
+            fi
+          fi
+
+          if [[ "$force_all_tests" == true ]]; then
+            specs_string="cypress/e2e/**/*.cy.{js,jsx,ts,tsx}"
+            echo "🔄 Forzando ejecución de TODAS las pruebas por PR a develop/master"
+          fi
+            
+          # Set outputs
+          echo "specs=$specs_string" >> $GITHUB_OUTPUT
+          echo "containers=4" >> $GITHUB_OUTPUT
+          echo "DEBUG: El valor de specs_string es: $specs_string"
+    
+      - name: Verify specifications output
+        run: |
+          echo "Specs to execute: ${{ steps.get_tests.outputs.specs }}"
+          if [[ -z "${{ steps.get_tests.outputs.specs }}" ]]; then
+            echo "⚠️ WARNING: No specifications to execute"
+          fi
+
+  code-quality-and-tests:
+    needs: determinate-tests
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: install-private-dependencies
+        uses: ./.github/actions/install-private-dependencies
+        with:
+          deploy-key-fracttal-core: ${{ secrets.DEPLOY_KEY_FRACTTAL_CORE }}
+          deploy-key-print-package: ${{ secrets.DEPLOY_KEY_PRINT_PACKAGE }}
+  
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - name: Install npm dependencies (Force resolution)
+        run: |
+          npm install --legacy-peer-deps
+          npm ci --legacy-peer-deps
+
+      - name: Verify NYC installation
+        run: npx nyc --version
+
+      - name: Update browserslist
+        run: |
+          npm install caniuse-lite --legacy-peer-deps
+          npx update-browserslist-db@latest --legacy-peer-deps
+
+      - name: Install missing dependencies
+        run: npm install --save --legacy-peer-deps immutable @zxing/library
+
+      - name: Set coverage environment variables
+        run: |
+          echo "COVERAGE=true" >> $GITHUB_ENV
+          echo "VITE_COVERAGE=true" >> $GITHUB_ENV
+          echo "CYPRESS_COVERAGE=true" >> $GITHUB_ENV
+        
+      - name: Prepare for coverage
+        run: |
+          mkdir -p test-coverage .nyc_output
+          chmod +x ./coverage-real.sh
+          ls -la
+          ./coverage-real.sh prepare
+
+      - name: Diagnostic of instrumentation
+        run: |
+          echo "📁 Checking instrumented files:"
+          ls -la instrumented/src || echo "❌ No instrumented/src directory found"
+          echo "📄 Checking example of instrumented file:"
+          grep -n "__cov" $(find instrumented -name "*.js" -not -path "*/node_modules/*" | head -n 1) || echo "❌ No coverage code found in files"
+          echo "🔧 Coverage environment variables:"
+          echo "COVERAGE=$COVERAGE"
+          echo "VITE_COVERAGE=$VITE_COVERAGE"
+          echo "CYPRESS_COVERAGE=$CYPRESS_COVERAGE"
+
+      - name: Cache instrumented files
+        uses: actions/cache@v3
+        with:
+          path: instrumented
+          key: instrumented-${{ runner.os }}-${{ hashFiles('src/**/*.{js,jsx,ts,tsx}') }}
+
+      - name: Configure admin companies
+        id: config
+        run: |
+          POSITION1="${{ vars.POSITION1 || 0 }}"
+          POSITION2="${{ vars.POSITION2 || 1 }}"
+          PASSWORD1="${{ secrets.CYPRESS_PASSWORD1 }}"
+          PASSWORD2="${{ secrets.CYPRESS_PASSWORD2 }}"
+          ADMIN_COMPANIES="[{\"position\":${POSITION1},\"password\":\"${PASSWORD1}\"},{\"position\":${POSITION2},\"password\":\"${PASSWORD2}\"}]"
+          echo "ADMIN_COMPANIES=$ADMIN_COMPANIES" >> $GITHUB_ENV
+          echo "Configurado: $ADMIN_COMPANIES"
+
+      - name: Run Cypress tests
+        if: ${{ needs.determinate-tests.outputs.specs != '' }}
+        uses: cypress-io/github-action@v6
+        env:
+          BASE_URL: "http://localhost:3000"
+          EMAIL: ${{ vars.CYPRESS_EMAIL }}
+          PASSWORD1: ${{ secrets.CYPRESS_PASSWORD1 }}
+          PASSWORD2: ${{ secrets.CYPRESS_PASSWORD2 }}
+          POSITION1: ${{ vars.POSITION1 || 0 }}
+          POSITION2: ${{ vars.POSITION2 || 1 }}
+          CYPRESS_COVERAGE: true
+          COVERAGE: true  
+          VITE_COVERAGE: true
+          CYPRESS_ADMIN_COMPANIES: ${{ env.ADMIN_COMPANIES }}
+        with:
+          install-command: npm ci --legacy-peer-deps
+          start: npm start
+          wait-on: 'http://localhost:3000?coverage=true'
+          wait-on-timeout: 210
+          spec: ${{ needs.determinate-tests.outputs.specs }}
+          config: baseUrl=http://localhost:3000
+          env: coverage=true,video=true,COVERAGE=true,VITE_COVERAGE=true,CYPRESS_COVERAGE=true
+
+      - name: Generate coverage report
+        if: always()
+        run: |
+          # Create a minimal .nyc_output/out.json file if it doesn't exist
+          if [ ! -f ".nyc_output/out.json" ]; then
+            mkdir -p .nyc_output
+            echo '{}' > .nyc_output/out.json
+            echo "⚠️ Creating minimal coverage file to prevent errors"
+          fi
+          
+          # Generate reports
+          npx nyc report --reporter=lcov --report-dir=coverage
+          npx nyc report --reporter=text-summary
+      
+      - name: Uploading test evidence
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-evidence
+          path: |
+            cypress/videos
+            cypress/screenshots
+          if-no-files-found: warn
+
+      - name: Set Sonar New Code Reference
+        if: always()
+        run: |
+          echo "Current branch: ${{ needs.determinate-tests.outputs.branch_name }}"
+          if [[ "${{ needs.determinate-tests.outputs.branch_name }}" == "develop" ]]; then
+            SONAR_REFERENCE="-Dsonar.newCode.referenceBranch=master"
+          elif [[ "${{ needs.determinate-tests.outputs.branch_name }}" == "master" ]]; then
+            SONAR_REFERENCE=""
+          else
+            SONAR_REFERENCE="-Dsonar.newCode.referenceBranch=develop"
+          fi
+          
+          echo "SONAR_NEW_CODE_REFERENCE=$SONAR_REFERENCE" >> $GITHUB_ENV
+          echo "Set SONAR_NEW_CODE_REFERENCE to: $SONAR_REFERENCE"
+
+      - name: Run SonarQube scan
+        if: always()
+        uses: sonarsource/sonarqube-scan-action@v4
+        timeout-minutes: 15
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.scm.revision=${{ github.sha }}
+            -Dsonar.branch.name=${{ needs.determinate-tests.outputs.branch_name }}
+            ${{ env.SONAR_NEW_CODE_REFERENCE }}
+            
+      - name: SonarQube Quality Gate
+        id: quality-gate
+        if: always()
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+
+      - name: Check Quality Gate result
+        if: always()
+        run: |
+          if [ "${{ steps.quality-gate.outputs.quality-gate-status }}" != "PASSED" ]; then
+            echo "❌ Quality Gate failed"
+            exit 1
+          else
+            echo "✅ Quality Gate passed"
+          fi

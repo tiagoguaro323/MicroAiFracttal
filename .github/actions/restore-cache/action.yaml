@@ -1,0 +1,24 @@
+name: 'Restore cache dependencies action'
+description: 'Restore cache dependencies for the CI VM'
+author: 'Edwin Montoya <edwin.montoya@fracttal.com>'
+inputs:
+  key:
+    description: 'Unique key to store/retrieve the cache'
+    required: true
+    default: |
+      dependency-cache-${{ runner.arch }}-${{ hashfiles('package.json') }}
+  path:
+    description: 'Path to restore the cache'
+    required: true
+    default: |
+      dependency-cache-${{ runner.arch }}-${{ hashfiles('package.json') }}
+runs:
+  using: "composite"
+  steps:
+  - name: Restore cache
+    id: cache-modules-restore
+    uses: actions/cache/restore@v4
+    with:
+      path: ${{ inputs.path }}
+      key: ${{ inputs.key }}
+

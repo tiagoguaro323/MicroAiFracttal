@@ -1,0 +1,2 @@
+export const FRACTTAL_HUB_ADDON = 'FRACTTAL_HUB';
+export const FRACTTAL_AI_ADDON = 'FRACTTAL_AI';

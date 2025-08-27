@@ -1,0 +1,12 @@
+name: 'Build Native App action 🏗️📱'
+description: 'Sets up the dependencies for the CI VM'
+author: 'Edwin Montoya <edwin.montoya@fracttal.com>'
+runs:
+  using: "composite"
+  steps:
+  - name: Building React App Native 🏗️📱
+    shell: bash
+    run: npm run native:build
+  - name: "Capacitor sync"
+    shell: bash
+    run: npx cap sync

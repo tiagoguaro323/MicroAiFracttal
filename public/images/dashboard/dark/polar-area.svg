@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180" viewBox="0 0 180 180">
+  <defs>
+    <clipPath id="clip-Widget-polar-area-dark">
+      <rect width="180" height="180"/>
+    </clipPath>
+  </defs>
+  <g id="Widget-polar-area-dark" clip-path="url(#clip-Widget-polar-area-dark)">
+    <g id="Grupo_33" data-name="Grupo 33" transform="translate(11.598 18)">
+      <path id="Trazado_31" data-name="Trazado 31" d="M-212,499.4l52.57,52.57a74.264,74.264,0,0,0,21.558-52.413,74.267,74.267,0,0,0-21.745-52.6L-212,499.338Z" transform="translate(277.412 -416.021)" fill="#b9f6ca"/>
+      <path id="Trazado_32" data-name="Trazado 32" d="M-153.86,441.968A83.275,83.275,0,0,0-212,418.006v82.1Z" transform="translate(277.412 -418.006)" fill="#6b9ff3"/>
+      <path id="Trazado_33" data-name="Trazado 33" d="M-263.838,480.282l-33.327-33.327A47.252,47.252,0,0,0-311,480.423a47.248,47.248,0,0,0,13.716,33.346l33.446-33.446Z" transform="translate(328.402 -396.919)" fill="#ef9a9a"/>
+      <path id="Trazado_34" data-name="Trazado 34" d="M-240.789,418.006a58.367,58.367,0,0,0-40.75,16.8l40.75,40.75Z" transform="translate(305.353 -393.449)" fill="#d6aaff"/>
+      <path id="Trazado_35" data-name="Trazado 35" d="M-281.792,559.2a59.5,59.5,0,0,0,41.99,17.271,59.5,59.5,0,0,0,41.99-17.271l-41.99-41.99Z" transform="translate(304.791 -433.057)" fill="#ffe082"/>
+      <path id="Trazado_36" data-name="Trazado 36" d="M-212.043,516.244l.036.036v-.073Z" transform="translate(277.419 -432.905)" fill="#4687f1"/>
+      <path id="Trazado_37" data-name="Trazado 37" d="M-213,516.207v.073l.036-.036Z" transform="translate(277.564 -432.905)" fill="#4687f1"/>
+    </g>
+  </g>
+</svg>
