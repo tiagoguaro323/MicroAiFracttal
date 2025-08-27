@@ -7,7 +7,7 @@
     "start": "vite --host",
     "preview": "vite preview",
     "preview:micro": "cross-env NODE_OPTIONS=--max-old-space-size=18192 vite build --mode production && vite preview",
-    "web:build": "cross-env NODE_OPTIONS=--max-old-space-size=18192 vite build --mode production",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=18192 vite build --mode production",
     "npm:update": "npm update --force --save",
     "npm:install": "npm install --force --save --legacy-peer-deps",
     "reinstall": "npx rimraf node_modules && npx rimraf package-lock.json && npm cache clean --force && npm install --force --save",
