@@ -1,2 +1,0 @@
-[build]
-  command = "npm install --force --save --legacy-peer-deps"
