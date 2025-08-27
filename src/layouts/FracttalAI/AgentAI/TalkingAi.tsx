@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 // import { useLocation } from 'react-router';
 import { t } from 'i18next';
-import { useMobile } from 'fracttal-core';
+import { useMobile } from 'hooks';
 import messagesAndRoutesRaw, { getSectionKeyFromPath } from './MessagesAi';
 
 export default function TalkingAi() {

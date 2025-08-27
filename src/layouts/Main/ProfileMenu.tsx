@@ -24,7 +24,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { push } from 'redux-first-history';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMobile } from 'fracttal-core';
+import { useMobile } from 'hooks';
 import { reset } from 'store';
 import themeToggle from 'store/theme/action';
 import DB from 'core/services/DB';

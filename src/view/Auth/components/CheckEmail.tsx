@@ -14,7 +14,6 @@ import { HttpRequestStatusTypes } from 'core/enums';
 import { mainError } from 'store/main/actions';
 import { authUpdate } from 'store/auth/action';
 import Util from 'core/helpers/Util';
-import { useNative } from 'fracttal-core';
 import Password from './Password';
 import Company from './Company';
 
@@ -68,7 +67,6 @@ const CheckEmail: FC<IProps> = ({
       }, []),
     [],
   );
-  const isNative = useNative();
 
   useEffect(() => {
     if (company === null) setIsFingerprint(false);
@@ -193,7 +191,6 @@ const CheckEmail: FC<IProps> = ({
     serverErrorStates,
     dispatch,
     remember,
-    isNative,
     t,
   ]);
 

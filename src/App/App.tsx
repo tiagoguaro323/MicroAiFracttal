@@ -4,7 +4,6 @@ import Bowser from 'bowser';
 import { useSelector } from 'react-redux';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { useLanguageCode } from 'fracttal-core';
 import moment from 'moment';
 import { StyledEngineProvider, Theme, useMediaQuery } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,6 +19,7 @@ import 'moment/dist/locale/fr';
 import 'moment/dist/locale/gl';
 import 'moment/dist/locale/ca';
 import 'moment/dist/locale/eu';
+import { useLanguageCode } from 'hooks';
 
 declare module '@mui/styles/defaultTheme' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface

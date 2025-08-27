@@ -12,11 +12,10 @@ import {
 } from 'constants/FracttalAI';
 import store from 'store';
 import { useTheme } from '@mui/material';
-import { useMobile } from 'fracttal-core';
-// import { useLocation } from 'react-router-dom';
 import setCurrentContextAi from 'store/contextAi/action';
 import i18n from 'i18next';
 import TalkingAi from './AgentAI/TalkingAi';
+import { useMobile } from 'hooks';
 
 interface IFracttalAI {
   open: boolean;

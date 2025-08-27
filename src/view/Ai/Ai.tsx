@@ -11,7 +11,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { createStyles, makeStyles } from '@mui/styles';
-import { useMobile } from 'fracttal-core';
+import { useMobile } from 'hooks';
 import { ButtonIcon } from 'designSystem';
 import useRequestAI from 'hooks/FracttalAI/useRequestAI';
 import useAgentAI from 'hooks/FracttalAI/useAgentAI';

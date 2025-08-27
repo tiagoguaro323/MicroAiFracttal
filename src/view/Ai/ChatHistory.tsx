@@ -15,7 +15,7 @@ import { ButtonIcon, Checkbox } from 'designSystem';
 import moment from 'moment';
 import { TransitionGroup } from 'react-transition-group';
 import 'moment/locale/es';
-import { useMobile } from 'fracttal-core';
+import { useMobile } from 'hooks';
 import useRequestAI from 'hooks/FracttalAI/useRequestAI';
 
 moment.locale('es');

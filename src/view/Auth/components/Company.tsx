@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { push, replace } from 'redux-first-history';
 import { ButtonIcon, MenuItem } from 'designSystem';
 import Util from 'core/helpers/Util';
-import { useNative } from 'fracttal-core';
 
 interface IProps {
   companies: any;
@@ -55,7 +54,6 @@ const Company: FC<IProps> = ({
   const theme = useTheme();
   const auth = useSelector((state: any) => state.auth);
   const dispatch: any = useDispatch();
-  const isNative = useNative();
 
   const isFingerprint = useMemo(
     () => hasFingerprint && (company?.password ?? '').length > 6,
@@ -90,7 +88,7 @@ const Company: FC<IProps> = ({
         } else {
           dispatch(push(`/${data.account.home_route.replace('.', '/') || ''}`));
         }
-        if (remember && isNative) {
+        if (remember) {
           onRememberUser(objPsw);
         }
       });
@@ -104,7 +102,6 @@ const Company: FC<IProps> = ({
     company.password,
     dispatch,
     isFingerprint,
-    isNative,
     loginSSO,
     oauthRedirect,
     remember,

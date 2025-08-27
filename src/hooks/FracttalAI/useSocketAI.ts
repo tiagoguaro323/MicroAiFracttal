@@ -2,7 +2,6 @@ import { useState, useRef } from 'react';
 import { io } from 'socket.io-client';
 import JWT from 'core/services/JWT';
 import useDeepCompareEffect from 'use-deep-compare-effect';
-import { useNative } from 'fracttal-core';
 import LanguageOptions from 'constants/LanguageOptions';
 import { useTranslation } from 'react-i18next';
 import useEnvAI from './useEnvAI';
@@ -30,20 +29,12 @@ export default function useSocket(props?: Props) {
   const [transcript, setTranscript] = useState<string>('');
   const { host: HOST } = useEnvAI();
   const { query = {}, onEvent } = props || {};
-  const isNative = useNative();
   const token = JWT.getToken();
   const { i18n } = useTranslation();
   const currentLanguage = getLanguageDescription(i18n.language);
 
   const socketRef = useRef(
-    !isNative
-      ? io(`${HOST}`, {
-          path: '/chat/ws',
-          reconnectionDelayMax: 10000,
-          transports: ['websocket'],
-          autoConnect: false,
-        })
-      : io(`wss://${HOST.replace('https://', '')}/`, {
+        io(`wss://${HOST.replace('https://', '')}/`, {
           path: '/chat/ws',
           reconnectionDelayMax: 10000,
           transports: ['websocket'],

@@ -6,7 +6,7 @@ import Markdown from 'react-markdown';
 import { IMessage } from 'hooks/FracttalAI/useAgentAI';
 import { useTranslation } from 'react-i18next';
 import { Player } from '@lottiefiles/react-lottie-player';
-import { useMobile } from 'fracttal-core';
+import { useMobile } from 'hooks';
 import Plot from 'react-plotly.js';
 import iconIaLight from './icon-IA-light.json';
 import iconIaDark from './icon-IA-dark.json';

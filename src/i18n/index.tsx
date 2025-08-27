@@ -1,4 +1,3 @@
-import { configI18nResouses } from 'fracttal-core';
 import en from './languages/en.json';
 import es from './languages/es.json';
 import ptBr from './languages/pt-br.json';
@@ -9,6 +8,7 @@ import ca from './languages/ca.json';
 import fr from './languages/fr.json';
 import it from './languages/it.json';
 import esEs from './languages/es-es.json';
+import configI18nResouses from './i18n';
 
 const i18n = configI18nResouses({
   en: {

@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
 import cx from 'clsx';
-import { useMobile } from 'fracttal-core';
+import { useMobile } from 'hooks';
 
 export type IProps = {
   value: number;

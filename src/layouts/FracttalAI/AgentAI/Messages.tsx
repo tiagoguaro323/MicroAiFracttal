@@ -16,7 +16,7 @@ import { IMessage } from 'hooks/FracttalAI/useAgentAI';
 import { useTranslation } from 'react-i18next';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { useSelector } from 'react-redux';
-import { useMobile } from 'fracttal-core';
+import { useMobile } from 'hooks';
 import { agentInfo } from 'constants/FracttalAI';
 import SignedImage from 'view/Ai/SignedImage';
 import Plot from 'react-plotly.js';

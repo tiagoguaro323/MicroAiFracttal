@@ -4,7 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { ButtonIcon } from 'designSystem';
 import useEnvAI from 'hooks/FracttalAI/useEnvAI';
 import { fetchApiAI } from 'hooks/FracttalAI/useRequestAI';
-import { useMobile } from 'fracttal-core';
+import { useMobile } from 'hooks';
 
 interface IProps {
   conversationID: string;
