@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { Icon, ButtonStyle as Button } from 'designSystem';
 import { temp } from 'designSystem/Icon/variants';
-import { CustomTooltip } from 'fracttal-core';
+import { CustomTooltip } from 'designSystem/CustomTooltip';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {

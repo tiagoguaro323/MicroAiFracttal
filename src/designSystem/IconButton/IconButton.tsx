@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { Icon } from 'designSystem';
 import { temp } from 'designSystem/Icon/variants';
-import { CustomTooltip } from 'fracttal-core';
+import { CustomTooltip } from 'designSystem/CustomTooltip';
 
 export type LIcon = (typeof temp)[number];
 
