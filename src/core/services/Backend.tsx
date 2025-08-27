@@ -12,9 +12,7 @@ if (deployInfo.tag === '___TAG___') {
   deployInfo.tag = '5.dev';
 }
 
-console.log(import.meta.env.VITE_APP_URL_API)
-
-const HOST = 'https://develop.fracttal.com';
+const HOST = import.meta.env.VITE_APP_URL_API || '';
 
 export class BackendService {
   private static instance: BackendService;

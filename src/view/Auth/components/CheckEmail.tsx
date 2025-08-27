@@ -106,9 +106,9 @@ const CheckEmail: FC<IProps> = ({
           password: auth.password,
         });
       }
-
+      console.log(host);
       setLoading(true);
-      fetch(`${host}/rpc/check_user`, {
+      fetch(`https://develop.fracttal.com/rpc/check_user`, {
         method: 'POST',
         body: JSON.stringify({ email: auth.email, password: pwd }),
         headers: {
